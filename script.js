@@ -1,74 +1,159 @@
-// Firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-import {
-  getDatabase,
-  ref,
-  push,
-  onValue,
-  remove
-} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-database.js";
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
 
-// Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyDH8Na-I0CPJoN-ElAi2sHfUt3Yv5iKSMg",
-  authDomain: "legendary-anime-watchlist.firebaseapp.com",
-  databaseURL: "https://legendary-anime-watchlist-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "legendary-anime-watchlist",
-  storageBucket: "legendary-anime-watchlist.firebasestorage.app",
-  messagingSenderId: "964225790114",
-  appId: "1:964225790114:web:c2752650f9ac3b61e567fb"
-};
+body{
+    background:#0f172a;
+    color:white;
+}
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+header{
+    text-align:center;
+    padding:35px 20px;
+    background:#111827;
+    border-bottom:2px solid #1e293b;
+}
 
-// HTML Elements
-const input = document.getElementById("animeInput");
-const list = document.getElementById("animeList");
-const addBtn = document.getElementById("addBtn");
+header h1{
+    font-size:34px;
+    margin-bottom:10px;
+}
 
-// Add Anime
-addBtn.addEventListener("click", () => {
+header p{
+    color:#94a3b8;
+    font-size:16px;
+}
 
-    const anime = input.value.trim();
+.container{
+    width:90%;
+    max-width:900px;
+    margin:40px auto;
+}
 
-    if (anime === "") {
-        alert("Enter an anime name!");
-        return;
-    }
+.search-section{
+    margin-bottom:20px;
+}
 
-    push(ref(db, "watchlist"), {
-        name: anime
-    });
+#searchInput{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#1e293b;
+    color:white;
+    font-size:16px;
+    outline:none;
+}
 
-    input.value = "";
+.add-section{
+    display:flex;
+    gap:10px;
+    margin-bottom:30px;
+}
 
-});
+#animeInput{
+    flex:1;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#1e293b;
+    color:white;
+    font-size:16px;
+    outline:none;
+}
 
-// Show Anime List
-onValue(ref(db, "watchlist"), (snapshot) => {
+#addBtn{
+    padding:14px 24px;
+    border:none;
+    border-radius:12px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+    transition:.3s;
+}
 
-    list.innerHTML = "";
+#addBtn:hover{
+    background:#1d4ed8;
+}
 
-    snapshot.forEach((child) => {
+#animeList{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
 
-        const data = child.val();
-        const key = child.key;
+.card{
+    background:#1e293b;
+    border-radius:15px;
+    padding:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    transition:.3s;
+}
 
-        const li = document.createElement("li");
+.card:hover{
+    transform:translateY(-3px);
+}
 
-        li.innerHTML = `
-            <span>${data.name}</span>
-            <button class="delete">Delete</button>
-        `;
+.card h3{
+    margin-bottom:5px;
+}
 
-        li.querySelector(".delete").addEventListener("click", () => {
-            remove(ref(db, "watchlist/" + key));
-        });
+.card p{
+    color:#94a3b8;
+}
 
-        list.appendChild(li);
+.actions{
+    display:flex;
+    gap:10px;
+}
 
-    });
+.deleteBtn{
+    background:#dc2626;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:10px;
+    cursor:pointer;
+}
 
-});
+.editBtn{
+    background:#f59e0b;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+@media(max-width:700px){
+
+.add-section{
+    flex-direction:column;
+}
+
+#addBtn{
+    width:100%;
+}
+
+.card{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:15px;
+}
+
+.actions{
+    width:100%;
+}
+
+.deleteBtn,
+.editBtn{
+    flex:1;
+}
+
+}
