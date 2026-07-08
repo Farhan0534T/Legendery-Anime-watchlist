@@ -1,28 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anime Watchlist</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legendary Anime Watchlist</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-  <h1>🎌 Anime Watchlist</h1>
-  <p>Keep track of your favorite anime.</p>
+
+    <h1>🎌 Legendary Anime Watchlist</h1>
+
+    <p>
+        Save your favorite anime and share them with everyone.
+    </p>
+
 </header>
 
-<div class="container">
+<main class="container">
 
-  <div class="add-box">
-    <input type="text" id="animeInput" placeholder="Enter anime name">
-    <button onclick="addAnime()">Add</button>
-  </div>
+    <section class="search-section">
 
-  <ul id="animeList"></ul>
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search Anime..."
+        >
 
-</div>
+    </section>
+
+    <section class="add-section">
+
+        <input
+            type="text"
+            id="animeInput"
+            placeholder="Anime Name"
+        >
+
+        <button id="addBtn">
+            Add Anime
+        </button>
+
+    </section>
+
+    <section id="animeList">
+
+    </section>
+
+</main>
 
 <script type="module" src="script.js"></script>
 
