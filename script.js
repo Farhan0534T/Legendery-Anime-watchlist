@@ -1,159 +1,131 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
+const animeInput = document.getElementById("animeInput");
+const addBtn = document.getElementById("addBtn");
+const animeList = document.getElementById("animeList");
+const searchInput = document.getElementById("searchInput");
 
-body{
-    background:#0f172a;
-    color:white;
-}
+let animeData = [];
 
-header{
-    text-align:center;
-    padding:35px 20px;
-    background:#111827;
-    border-bottom:2px solid #1e293b;
-}
+// Add Anime
+addBtn.addEventListener("click", addAnime);
 
-header h1{
-    font-size:34px;
-    margin-bottom:10px;
-}
+function addAnime(){
 
-header p{
-    color:#94a3b8;
-    font-size:16px;
-}
+    let name = animeInput.value.trim();
 
-.container{
-    width:90%;
-    max-width:900px;
-    margin:40px auto;
-}
+    if(name === ""){
+        alert("Enter anime name!");
+        return;
+    }
 
-.search-section{
-    margin-bottom:20px;
-}
+    let anime = {
+        id: Date.now(),
+        name: name,
+        rating: "N/A",
+        status: "Plan to Watch"
+    };
 
-#searchInput{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:12px;
-    background:#1e293b;
-    color:white;
-    font-size:16px;
-    outline:none;
-}
+    animeData.push(anime);
 
-.add-section{
-    display:flex;
-    gap:10px;
-    margin-bottom:30px;
-}
+    showAnime(animeData);
 
-#animeInput{
-    flex:1;
-    padding:14px;
-    border:none;
-    border-radius:12px;
-    background:#1e293b;
-    color:white;
-    font-size:16px;
-    outline:none;
-}
-
-#addBtn{
-    padding:14px 24px;
-    border:none;
-    border-radius:12px;
-    background:#2563eb;
-    color:white;
-    cursor:pointer;
-    font-size:16px;
-    transition:.3s;
-}
-
-#addBtn:hover{
-    background:#1d4ed8;
-}
-
-#animeList{
-    display:flex;
-    flex-direction:column;
-    gap:15px;
-}
-
-.card{
-    background:#1e293b;
-    border-radius:15px;
-    padding:18px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    transition:.3s;
-}
-
-.card:hover{
-    transform:translateY(-3px);
-}
-
-.card h3{
-    margin-bottom:5px;
-}
-
-.card p{
-    color:#94a3b8;
-}
-
-.actions{
-    display:flex;
-    gap:10px;
-}
-
-.deleteBtn{
-    background:#dc2626;
-    color:white;
-    border:none;
-    padding:10px 15px;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-.editBtn{
-    background:#f59e0b;
-    color:white;
-    border:none;
-    padding:10px 15px;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-@media(max-width:700px){
-
-.add-section{
-    flex-direction:column;
-}
-
-#addBtn{
-    width:100%;
-}
-
-.card{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:15px;
-}
-
-.actions{
-    width:100%;
-}
-
-.deleteBtn,
-.editBtn{
-    flex:1;
-}
+    animeInput.value = "";
 
 }
+
+
+// Show Anime
+function showAnime(data){
+
+    animeList.innerHTML = "";
+
+    data.forEach(anime => {
+
+        let card = document.createElement("div");
+
+        card.className = "card";
+
+        card.innerHTML = `
+
+        <div>
+            <h3>🎌 ${anime.name}</h3>
+            <p>⭐ Rating: ${anime.rating}</p>
+            <p>📺 Status: ${anime.status}</p>
+        </div>
+
+        <div class="actions">
+
+            <button class="editBtn">
+                Edit
+            </button>
+
+            <button class="deleteBtn">
+                Delete
+            </button>
+
+        </div>
+
+        `;
+
+
+        // Delete
+        card.querySelector(".deleteBtn").onclick = function(){
+
+            animeData = animeData.filter(
+                item => item.id !== anime.id
+            );
+
+            showAnime(animeData);
+
+        };
+
+
+        // Edit
+        card.querySelector(".editBtn").onclick = function(){
+
+            let newName = prompt(
+                "Edit anime name:",
+                anime.name
+            );
+
+            if(newName){
+
+                anime.name = newName;
+
+                showAnime(animeData);
+
+            }
+
+        };
+
+
+        animeList.appendChild(card);
+
+    });
+
+}
+
+
+// Search
+searchInput.addEventListener("input", function(){
+
+    let value = searchInput.value.toLowerCase();
+
+
+    let filtered = animeData.filter(anime =>
+        anime.name.toLowerCase().includes(value)
+    );
+
+
+    showAnime(filtered);
+
+});
+
+
+// Enter key add
+animeInput.addEventListener("keypress", function(e){
+
+    if(e.key === "Enter"){
+        addAnime();
+    }
+
+});
