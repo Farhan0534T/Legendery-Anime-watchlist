@@ -118,6 +118,7 @@ Delete
 document.querySelectorAll(".deleteBtn").forEach(btn => {
 
     btn.onclick = () => {
+      alert("Delete clicked");
 
         remove(ref(db, "watchlist/" + btn.dataset.key));
 
