@@ -63,29 +63,6 @@ function statusOptions(current){
 
 }
 
-addBtn.onclick=()=>{
-
-    let name=animeInput.value.trim();
-
-    if(name===""){
-
-        alert("Enter anime name");
-        return;
-
-    }
-
-    push(ref(db,"watchlist"),{
-
-        name,
-        rating:"0",
-        status:"Plan to Watch",
-        favorite:false
-
-    });
-
-    animeInput.value="";
-
-};
 function render(search = "") {
 
     onValue(ref(db, "watchlist"), (snapshot) => {
