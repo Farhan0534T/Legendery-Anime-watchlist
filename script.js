@@ -23,7 +23,6 @@ const db = getDatabase(app);
 
 const animeInput = document.getElementById("animeInput");
 const searchInput = document.getElementById("searchInput");
-const addBtn = document.getElementById("addBtn");
 const animeList = document.getElementById("animeList");
 const searchResults = document.getElementById("searchResults");
 const statusList = [
