@@ -87,25 +87,33 @@ if (
             card.className = "card";
 
             card.innerHTML = `
-            <h3>🎌 ${anime.name}</h3>
+<img src="${anime.poster}" class="poster">
 
-            <p>
-                ⭐ Rating
-                <select class="rating">
-                    ${ratingOptions(anime.rating)}
-                </select>
-            </p>
+<h3>🎌 ${anime.name}</h3>
 
-            <p>
-                📺 Status
-                <select class="status">
-                    ${statusOptions(anime.status)}
-                </select>
-            </p>
+<p>⭐ MAL Score: ${anime.score ?? "N/A"}</p>
 
-            <button class="edit">Edit</button>
-            <button class="delete">Delete</button>
-            `;
+<p>📺 Episodes: ${anime.episodes ?? "?"}</p>
+
+<p>📅 Year: ${anime.year ?? "Unknown"}</p>
+
+<p>
+⭐ My Rating
+<select class="rating">
+${ratingOptions(anime.rating)}
+</select>
+</p>
+
+<p>
+📺 Status
+<select class="status">
+${statusOptions(anime.status)}
+</select>
+</p>
+
+<button class="edit">Edit</button>
+<button class="delete">Delete</button>
+`;
 
             // Rating
             card.querySelector(".rating").onchange = (e) => {
