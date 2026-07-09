@@ -183,3 +183,8 @@ header p{
     object-fit:cover;
     border-radius:5px;
 }
+.poster{
+    width:120px;
+    border-radius:10px;
+    margin-bottom:10px;
+}
