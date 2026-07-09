@@ -199,12 +199,16 @@ animeInput.addEventListener("input", async () => {
 
                 push(ref(db, "watchlist"), {
 
-                    name: anime.title,
-                    rating: "0",
-                    status: "Plan to Watch",
-                    favorite: false
+    name: anime.title,
+    poster: anime.images.jpg.image_url,
+    score: anime.score,
+    year: anime.year,
+    episodes: anime.episodes,
+    rating: "0",
+    status: "Plan to Watch",
+    favorite: false
 
-                });
+});
 
                 animeInput.value = "";
                 searchResults.innerHTML = "";
