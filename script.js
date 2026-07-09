@@ -98,12 +98,14 @@ function render(search = "") {
             const key = child.key;
             const anime = child.val();
 
-            if (
-                search &&
-                !anime.name.toLowerCase().includes(search.toLowerCase())
-            ) {
-                return;
-            }
+            const searchText = search.trim().toLowerCase();
+
+if (
+    searchText !== "" &&
+    !anime.name.toLowerCase().includes(searchText)
+) {
+    return;
+}
 
             const card = document.createElement("div");
             card.className = "card";
