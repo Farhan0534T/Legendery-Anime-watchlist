@@ -1,3 +1,4 @@
+alert("Script Loaded");
 const animeInput = document.getElementById("animeInput");
 const addBtn = document.getElementById("addBtn");
 const animeList = document.getElementById("animeList");
