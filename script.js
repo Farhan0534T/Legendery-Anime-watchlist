@@ -163,11 +163,6 @@ searchInput.addEventListener("input", (e) => {
     render(e.target.value);
 });
 
-animeInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-        addBtn.click();
-    }
-});
 
 render();
 animeInput.addEventListener("input", async () => {
