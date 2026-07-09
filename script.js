@@ -194,3 +194,60 @@ animeInput.addEventListener("keydown", (e) => {
 });
 
 render();
+animeInput.addEventListener("input", async () => {
+
+    const query = animeInput.value.trim();
+
+    if (query.length < 2) {
+        searchResults.innerHTML = "";
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=5`
+        );
+
+        const result = await response.json();
+
+        searchResults.innerHTML = "";
+
+        result.data.forEach(anime => {
+
+            const item = document.createElement("div");
+
+            item.className = "result";
+
+            item.innerHTML = `
+                <img src="${anime.images.jpg.image_url}" width="45">
+                <span>${anime.title}</span>
+            `;
+
+            item.onclick = () => {
+
+                push(ref(db, "watchlist"), {
+
+                    name: anime.title,
+                    rating: "0",
+                    status: "Plan to Watch",
+                    favorite: false
+
+                });
+
+                animeInput.value = "";
+                searchResults.innerHTML = "";
+
+            };
+
+            searchResults.appendChild(item);
+
+        });
+
+    } catch (err) {
+
+        console.log(err);
+
+    }
+
+});
