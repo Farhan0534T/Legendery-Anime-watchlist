@@ -22,139 +22,173 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 const animeInput = document.getElementById("animeInput");
+const searchInput = document.getElementById("searchInput");
 const addBtn = document.getElementById("addBtn");
 const animeList = document.getElementById("animeList");
 
-addBtn.addEventListener("click", () => {
+const statusList = [
+  "Plan to Watch",
+  "Watching",
+  "Completed",
+  "On Hold",
+  "Dropped"
+];
 
-    const name = animeInput.value.trim();
+function ratingOptions(current){
 
-    if(name === ""){
-        alert("Enter anime name!");
+    let html="";
+
+    for(let i=0;i<=20;i++){
+
+        let value=(i*0.5).toString();
+
+        html+=`<option value="${value}" ${value==current?"selected":""}>${value}</option>`;
+
+    }
+
+    return html;
+
+}
+
+function statusOptions(current){
+
+    let html="";
+
+    statusList.forEach(status=>{
+
+        html+=`<option value="${status}" ${status==current?"selected":""}>${status}</option>`;
+
+    });
+
+    return html;
+
+}
+
+addBtn.onclick=()=>{
+
+    let name=animeInput.value.trim();
+
+    if(name===""){
+
+        alert("Enter anime name");
         return;
+
     }
 
     push(ref(db,"watchlist"),{
-    name: name,
-    rating: "0",
-    status: "Plan to Watch"
-});
+
+        name,
+        rating:"0",
+        status:"Plan to Watch",
+        favorite:false
+
+    });
 
     animeInput.value="";
 
-});
+};
+function render(search = "") {
 
-onValue(ref(db,"watchlist"),(snapshot)=>{
+    onValue(ref(db, "watchlist"), (snapshot) => {
 
-    animeList.innerHTML="";
+        animeList.innerHTML = "";
 
-    snapshot.forEach((child)=>{
+        snapshot.forEach((child) => {
 
-        const anime=child.val();
+            const key = child.key;
+            const anime = child.val();
 
-       const key = child.key;
+            if (
+                search &&
+                !anime.name.toLowerCase().includes(search.toLowerCase())
+            ) {
+                return;
+            }
 
-animeList.innerHTML += `
-<div class="card">
+            const card = document.createElement("div");
+            card.className = "card";
 
-<div>
+            card.innerHTML = `
+            <h3>🎌 ${anime.name}</h3>
 
-<h3>🎌 ${anime.name}</h3>
+            <p>
+                ⭐ Rating
+                <select class="rating">
+                    ${ratingOptions(anime.rating)}
+                </select>
+            </p>
 
-<p>
-Rating:
-<select class="rating" data-key="${key}" data-value="${anime.rating}">
-<option value="0">0</option>
-<option value="0.5">0.5</option>
-<option value="1">1</option>
-<option value="1.5">1.5</option>
-<option value="2">2</option>
-<option value="2.5">2.5</option>
-<option value="3">3</option>
-<option value="3.5">3.5</option>
-<option value="4">4</option>
-<option value="4.5">4.5</option>
-<option value="5">5</option>
-<option value="5.5">5.5</option>
-<option value="6">6</option>
-<option value="6.5">6.5</option>
-<option value="7">7</option>
-<option value="7.5">7.5</option>
-<option value="8">8</option>
-<option value="8.5">8.5</option>
-<option value="9">9</option>
-<option value="9.5">9.5</option>
-<option value="10">10</option>
-</select>
-</p>
+            <p>
+                📺 Status
+                <select class="status">
+                    ${statusOptions(anime.status)}
+                </select>
+            </p>
 
-<p>
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+            `;
 
-Status:
+            // Rating
+            card.querySelector(".rating").onchange = (e) => {
 
-<select class="status" data-key="${key}" data-value="${anime.status}">
+                update(ref(db, "watchlist/" + key), {
+                    rating: e.target.value
+                });
 
-<option>Plan to Watch</option>
-<option>Watching</option>
-<option>Completed</option>
-<option>On Hold</option>
-<option>Dropped</option>
+            };
 
-</select>
+            // Status
+            card.querySelector(".status").onchange = (e) => {
 
-</p>
+                update(ref(db, "watchlist/" + key), {
+                    status: e.target.value
+                });
 
-<button class="deleteBtn" data-key="${key}">
-Delete
-</button>
+            };
 
-</div>
+            // Delete
+            card.querySelector(".delete").onclick = () => {
 
-</div>
-`;
+                if (confirm("Delete this anime?")) {
+
+                    remove(ref(db, "watchlist/" + key));
+
+                }
+
+            };
+
+            // Edit
+            card.querySelector(".edit").onclick = () => {
+
+                const newName = prompt(
+                    "Edit Anime Name",
+                    anime.name
+                );
+
+                if (!newName) return;
+
+                update(ref(db, "watchlist/" + key), {
+                    name: newName.trim()
+                });
+
+            };
+
+            animeList.appendChild(card);
+
+        });
 
     });
-  // Delete
-document.querySelectorAll(".deleteBtn").forEach(btn => {
 
-    btn.onclick = () => {
-      alert("Delete clicked");
-
-        remove(ref(db, "watchlist/" + btn.dataset.key));
-
-    };
-
-});
-document.querySelectorAll(".rating").forEach(select=>{
-
-    select.value = select.dataset.value;
-
-    select.onchange=()=>{
-
-        update(ref(db,"watchlist/"+select.dataset.key),{
-
-            rating:select.value
-
-        });
-
-    };
-
+}
+searchInput.addEventListener("input", (e) => {
+    render(e.target.value);
 });
 
-document.querySelectorAll(".status").forEach(select=>{
-
-    select.value = select.dataset.value;
-
-    select.onchange=()=>{
-
-        update(ref(db,"watchlist/"+select.dataset.key),{
-
-            status:select.value
-
-        });
-
-    };
-
+animeInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        addBtn.click();
+    }
 });
 
-});
+render();
