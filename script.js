@@ -175,48 +175,87 @@ searchInput.addEventListener("input", (e) => {
 
 
 render();
-animeInput.addEventListener("input", async () => {
+let searchTimeout;
 
-    const query = animeInput.value.trim();
+animeInput.addEventListener("input", () => {
 
-    if (query.length < 2) {
-        searchResults.innerHTML = "";
-        return;
-    }
+    clearTimeout(searchTimeout);
 
-    try {
+    searchTimeout = setTimeout(async () => {
 
-        const response = await fetch(
-            `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=5`
-        );
-console.log(response.status);
-        const result = await response.json();
-console.log(result);
-        searchResults.innerHTML = "";
+        const query = animeInput.value.trim();
 
-        result.data.forEach(anime => {
+        if (query.length < 2) {
+            searchResults.innerHTML = "";
+            return;
+        }
 
-            const item = document.createElement("div");
+        try {
 
-            item.className = "result";
+            const response = await fetch(
+                `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=5`
+            );
 
-            item.innerHTML = `
-                <img src="${anime.images.jpg.image_url}" width="45">
-                <span>${anime.title}</span>
-            `;
+            if (!response.ok) {
+                console.log("Search Error:", response.status);
+                return;
+            }
 
-            item.onclick = () => {
+            const result = await response.json();
 
-                push(ref(db, "watchlist"), {
+            searchResults.innerHTML = "";
 
-    name: anime.title,
-    poster: anime.images.jpg.image_url,
-    score: anime.score,
-    year: anime.year,
-    episodes: anime.episodes,
-    rating: "0",
-    status: "Plan to Watch",
-    favorite: false
+            if (!result.data || result.data.length === 0) {
+
+                searchResults.innerHTML =
+                    `<div class="result">No anime found</div>`;
+
+                return;
+
+            }
+
+            result.data.forEach(anime => {
+
+                const item = document.createElement("div");
+
+                item.className = "result";
+
+                item.innerHTML = `
+                    <img src="${anime.images.jpg.image_url}" width="45">
+                    <span>${anime.title}</span>
+                `;
+
+                item.onclick = () => {
+
+                    push(ref(db, "watchlist"), {
+
+                        name: anime.title,
+                        poster: anime.images.jpg.image_url,
+                        score: anime.score,
+                        year: anime.year,
+                        episodes: anime.episodes,
+                        rating: "0",
+                        status: "Plan to Watch",
+                        favorite: false
+
+                    });
+
+                    animeInput.value = "";
+                    searchResults.innerHTML = "";
+
+                };
+
+                searchResults.appendChild(item);
+
+            });
+
+        } catch (err) {
+
+            console.log(err);
+
+        }
+
+    }, 400);
 
 });
 
