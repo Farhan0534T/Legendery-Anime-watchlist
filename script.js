@@ -236,7 +236,7 @@ const result = await response.json();
 
             item.innerHTML = `
                 <img src="${anime.images.jpg.image_url}" width="45">
-                <span>${anime.title}</span>
+                <span>${anime.title.english || anime.title.romaji}</span>
             `;
 
             item.onclick = async () => {
