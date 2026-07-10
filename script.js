@@ -191,11 +191,40 @@ animeInput.addEventListener("input", async () => {
 
     try {
 
-        const response = await fetch(
-            `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=5`
-        );
+        const queryGraphQL = `
+query ($search: String) {
+  Page(page: 1, perPage: 5) {
+    media(search: $search, type: ANIME) {
+      id
+      title {
+        romaji
+        english
+      }
+      coverImage {
+        large
+      }
+      averageScore
+      episodes
+      seasonYear
+    }
+  }
+}
+`;
 
-        const result = await response.json();
+const response = await fetch("https://graphql.anilist.co", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        query: queryGraphQL,
+        variables: {
+            search: query
+        }
+    })
+});
+
+const result = await response.json();
 
         searchResults.innerHTML = "";
 
