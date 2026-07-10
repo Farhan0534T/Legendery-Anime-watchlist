@@ -189,7 +189,7 @@ animeInput.addEventListener("input", async () => {
         const response = await fetch(
             `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=5`
         );
-
+console.log(response.status);
         const result = await response.json();
 
         searchResults.innerHTML = "";
