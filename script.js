@@ -185,11 +185,14 @@ animeInput.addEventListener("input", () => {
     searchTimeout = setTimeout(async () => {
 
         const query = animeInput.value.trim();
+
+if (query.length < 2) {
+    searchResults.innerHTML = "";
+    universeResults.innerHTML = "";
+    return;
+}
+
 showUniverseCard(query);
-        if (query.length < 2) {
-            searchResults.innerHTML = "";
-            return;
-        }
 
         try {
 
