@@ -228,7 +228,7 @@ const result = await response.json();
 
         searchResults.innerHTML = "";
 
-        result.data.forEach(anime => {
+        result.data.Page.media.forEach(anime=>{
 
             const item = document.createElement("div");
 
