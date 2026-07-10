@@ -241,3 +241,14 @@ animeInput.addEventListener("input", async () => {
     }
 
 });
+async function getAnimeRelations(id){
+
+    const response = await fetch(
+        `https://api.jikan.moe/v4/anime/${id}/full`
+    );
+
+    const data = await response.json();
+
+    return data.data.relations || [];
+
+}
