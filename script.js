@@ -225,7 +225,7 @@ animeInput.addEventListener("input", () => {
                     <span>${anime.title}</span>
                 `;
 
-                item.onclick = () => {
+                item.onclick = async () => {
 
                     push(ref(db, "watchlist"), {
 
