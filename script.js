@@ -325,3 +325,63 @@ function showUniverseCard(name){
     universeResults.appendChild(card);
 
 }
+async function getUniverse(name) {
+
+    const query = `
+    query ($search:String){
+
+      Media(search:$search,type:ANIME){
+
+        id
+
+        title{
+          romaji
+          english
+        }
+
+        relations{
+
+          edges{
+
+            relationType
+
+            node{
+
+              id
+
+              title{
+                romaji
+                english
+              }
+
+              type
+
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+    `;
+
+    const response = await fetch("https://graphql.anilist.co",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            query,
+            variables:{
+                search:name
+            }
+        })
+    });
+
+    const result = await response.json();
+
+    return result.data.Media;
+
+}
