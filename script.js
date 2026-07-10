@@ -258,20 +258,3 @@ animeInput.addEventListener("input", () => {
     }, 400);
 
 });
-
-                animeInput.value = "";
-                searchResults.innerHTML = "";
-
-            };
-
-            searchResults.appendChild(item);
-
-        });
-
-    } catch (err) {
-
-        console.log(err);
-
-    }
-
-});
