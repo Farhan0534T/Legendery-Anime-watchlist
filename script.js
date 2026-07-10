@@ -30,7 +30,8 @@ const statusList = [
   "Watching",
   "Completed",
   "On Hold",
-  "Dropped"
+  "Dropped",
+  "Discontinued",
 ];
 
 function ratingOptions(current){
