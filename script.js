@@ -24,6 +24,7 @@ const db = getDatabase(app);
 const animeInput = document.getElementById("animeInput");
 const searchInput = document.getElementById("searchInput");
 const animeList = document.getElementById("animeList");
+const universeResults = document.getElementById("universeResults");
 const searchResults = document.getElementById("searchResults");
 const statusList = [
   "Plan to watch",
