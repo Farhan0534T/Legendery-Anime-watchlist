@@ -188,3 +188,20 @@ header p{
     border-radius:10px;
     margin-bottom:10px;
 }
+#universeResults{
+    margin-top:10px;
+}
+
+.universe-card{
+    background:#202b3c;
+    padding:15px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:18px;
+    margin-bottom:10px;
+    transition:.2s;
+}
+
+.universe-card:hover{
+    background:#2d3b52;
+}
