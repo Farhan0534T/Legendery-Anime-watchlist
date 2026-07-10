@@ -247,7 +247,7 @@ const result = await response.json();
 
     push(ref(db, "watchlist"), {
 
-        name: anime.title,
+        name: anime.title.english || anime.title.romaji,
         poster: anime.images.jpg.image_url,
         score: anime.score,
         year: anime.year,
