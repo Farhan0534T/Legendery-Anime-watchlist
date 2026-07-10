@@ -310,3 +310,18 @@ alert("testUniverse called");
     }
 
 }
+function showUniverseCard(name){
+
+    universeResults.innerHTML = "";
+
+    const card = document.createElement("div");
+
+    card.className = "universe-card";
+
+    card.innerHTML = `
+        📁 ${name} Universe
+    `;
+
+    universeResults.appendChild(card);
+
+}
