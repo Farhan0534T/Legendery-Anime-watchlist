@@ -329,11 +329,28 @@ alert("Universe Clicked");
 
         console.log(universe);
 
-        alert(
-            `${universe.title.english || universe.title.romaji}\n\nRelations: ${
-                universe.relations.edges.length
-            }`
-        );
+        universeResults.innerHTML = "";
+
+const title = document.createElement("h3");
+title.textContent = "📁 " + (universe.title.english || universe.title.romaji);
+
+universeResults.appendChild(title);
+
+universe.relations.edges.forEach(edge => {
+
+    if(edge.node.type !== "ANIME") return;
+
+    const item = document.createElement("div");
+
+    item.className = "result";
+
+    item.textContent =
+        `${edge.node.title.english || edge.node.title.romaji}
+        (${edge.relationType})`;
+
+    universeResults.appendChild(item);
+
+});
 
     };
 
