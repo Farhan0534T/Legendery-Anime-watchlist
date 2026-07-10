@@ -23,11 +23,6 @@ const db = getDatabase(app);
 
 const animeInput = document.getElementById("animeInput");
 const searchInput = document.getElementById("searchInput");
-const searchResults = document.getElementById("searchResults");
-
-let universeMode = false;
-let currentUniverse = [];
-let currentUniverseName = "";
 const animeList = document.getElementById("animeList");
 const searchResults = document.getElementById("searchResults");
 const statusList = [
@@ -191,44 +186,15 @@ animeInput.addEventListener("input", async () => {
 
     try {
 
-        const queryGraphQL = `
-query ($search: String) {
-  Page(page: 1, perPage: 5) {
-    media(search: $search, type: ANIME) {
-      id
-      title {
-        romaji
-        english
-      }
-      coverImage {
-        large
-      }
-      averageScore
-      episodes
-      seasonYear
-    }
-  }
-}
-`;
+        const response = await fetch(
+            `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=5`
+        );
 
-const response = await fetch("https://graphql.anilist.co", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-        query: queryGraphQL,
-        variables: {
-            search: query
-        }
-    })
-});
-
-const result = await response.json();
+        const result = await response.json();
 
         searchResults.innerHTML = "";
 
-        result.data.Page.media.forEach(anime=>{
+        result.data.forEach(anime => {
 
             const item = document.createElement("div");
 
@@ -236,32 +202,28 @@ const result = await response.json();
 
             item.innerHTML = `
                 <img src="${anime.images.jpg.image_url}" width="45">
-                <span>${anime.title.english || anime.title.romaji}</span>
+                <span>${anime.title}</span>
             `;
 
-            item.onclick = async () => {
+            item.onclick = () => {
 
-    const relations = await getAnimeRelations(anime.mal_id);
+                push(ref(db, "watchlist"), {
 
-    console.log(relations);
+    name: anime.title,
+    poster: anime.images.jpg.image_url,
+    score: anime.score,
+    year: anime.year,
+    episodes: anime.episodes,
+    rating: "0",
+    status: "Plan to Watch",
+    favorite: false
 
-    push(ref(db, "watchlist"), {
+});
 
-        name: anime.title.english || anime.title.romaji,
-        poster: anime.images.jpg.image_url,
-        score: anime.score,
-        year: anime.year,
-        episodes: anime.episodes,
-        rating: "0",
-        status: "Plan to Watch",
-        favorite: false
+                animeInput.value = "";
+                searchResults.innerHTML = "";
 
-    });
-
-    animeInput.value = "";
-    searchResults.innerHTML = "";
-
-};
+            };
 
             searchResults.appendChild(item);
 
@@ -274,14 +236,3 @@ const result = await response.json();
     }
 
 });
-async function getAnimeRelations(id){
-
-    const response = await fetch(
-        `https://api.jikan.moe/v4/anime/${id}/full`
-    );
-
-    const data = await response.json();
-
-    return data.data.relations || [];
-
-}
