@@ -26,12 +26,13 @@ const searchInput = document.getElementById("searchInput");
 const animeList = document.getElementById("animeList");
 const searchResults = document.getElementById("searchResults");
 const statusList = [
-  "Plan to Watch",
+  "Plan to watch",
   "Watching",
-  "Completed",
-  "On Hold",
+  "Releasing",
+  "On hiatus",
   "Dropped",
   "Discontinued",
+  "Finished"
 ];
 
 function ratingOptions(current){
