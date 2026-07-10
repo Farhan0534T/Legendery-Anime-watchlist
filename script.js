@@ -226,7 +226,7 @@ animeInput.addEventListener("input", () => {
                 `;
 
                 item.onclick = async () => {
-
+await testUniverse(anime.title);
                     push(ref(db, "watchlist"), {
 
                         name: anime.title,
