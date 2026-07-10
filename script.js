@@ -324,7 +324,7 @@ function showUniverseCard(name){
     card.textContent=`📁 ${name} Universe`;
 
     card.onclick=async()=>{
-
+alert("Universe Clicked");
         const universe=await getUniverse(name);
 
         console.log(universe);
