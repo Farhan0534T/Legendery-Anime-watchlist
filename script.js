@@ -191,7 +191,7 @@ animeInput.addEventListener("input", async () => {
         );
 console.log(response.status);
         const result = await response.json();
-
+console.log(result);
         searchResults.innerHTML = "";
 
         result.data.forEach(anime => {
