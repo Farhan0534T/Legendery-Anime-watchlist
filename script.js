@@ -23,6 +23,11 @@ const db = getDatabase(app);
 
 const animeInput = document.getElementById("animeInput");
 const searchInput = document.getElementById("searchInput");
+const searchResults = document.getElementById("searchResults");
+
+let universeMode = false;
+let currentUniverse = [];
+let currentUniverseName = "";
 const animeList = document.getElementById("animeList");
 const searchResults = document.getElementById("searchResults");
 const statusList = [
