@@ -210,25 +210,29 @@ animeInput.addEventListener("input", async () => {
                 <span>${anime.title}</span>
             `;
 
-            item.onclick = () => {
+            item.onclick = async () => {
 
-                push(ref(db, "watchlist"), {
+    const relations = await getAnimeRelations(anime.mal_id);
 
-    name: anime.title,
-    poster: anime.images.jpg.image_url,
-    score: anime.score,
-    year: anime.year,
-    episodes: anime.episodes,
-    rating: "0",
-    status: "Plan to Watch",
-    favorite: false
+    console.log(relations);
 
-});
+    push(ref(db, "watchlist"), {
 
-                animeInput.value = "";
-                searchResults.innerHTML = "";
+        name: anime.title,
+        poster: anime.images.jpg.image_url,
+        score: anime.score,
+        year: anime.year,
+        episodes: anime.episodes,
+        rating: "0",
+        status: "Plan to Watch",
+        favorite: false
 
-            };
+    });
+
+    animeInput.value = "";
+    searchResults.innerHTML = "";
+
+};
 
             searchResults.appendChild(item);
 
