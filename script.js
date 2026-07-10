@@ -291,7 +291,7 @@ async function searchAniList(title) {
 
 }
 async function testUniverse(name) {
-
+alert("testUniverse called");
     try {
 
         const anime = await searchAniList(name);
