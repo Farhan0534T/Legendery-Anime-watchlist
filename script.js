@@ -312,15 +312,27 @@ alert("testUniverse called");
 }
 function showUniverseCard(name){
 
-    universeResults.innerHTML = "";
+    universeResults.innerHTML="";
 
-    const card = document.createElement("div");
+    const card=document.createElement("div");
 
-    card.className = "universe-card";
+    card.className="universe-card";
 
-    card.innerHTML = `
-        📁 ${name} Universe
-    `;
+    card.textContent=`📁 ${name} Universe`;
+
+    card.onclick=async()=>{
+
+        const universe=await getUniverse(name);
+
+        console.log(universe);
+
+        alert(
+            `${universe.title.english || universe.title.romaji}\n\nRelations: ${
+                universe.relations.edges.length
+            }`
+        );
+
+    };
 
     universeResults.appendChild(card);
 
