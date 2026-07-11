@@ -465,15 +465,28 @@ async function getUniverse(name) {
 
             node{
 
-              id
-              type
+    id
 
-              title{
-                romaji
-                english
-              }
+    type
 
-            }
+    format
+
+    episodes
+
+    averageScore
+
+    seasonYear
+
+    coverImage{
+        large
+    }
+
+    title{
+        romaji
+        english
+    }
+
+}
 
           }
 
