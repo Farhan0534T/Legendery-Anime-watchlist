@@ -205,3 +205,18 @@ header p{
 .universe-card:hover{
     background:#2d3b52;
 }
+#universeList{
+    margin-top:10px;
+}
+
+.universe-card{
+    background:#1f2937;
+    padding:12px;
+    border-radius:10px;
+    cursor:pointer;
+    margin-bottom:10px;
+}
+
+.universe-card:hover{
+    background:#374151;
+}
