@@ -186,6 +186,11 @@ animeInput.addEventListener("input", () => {
     searchTimeout = setTimeout(async () => {
 
         const query = animeInput.value.trim();
+        universeList.innerHTML = `
+    <div class="universe-card">
+        📁 ${query} Universe
+    </div>
+`;
 
 if (query.length < 2) {
     searchResults.innerHTML = "";
