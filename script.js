@@ -202,7 +202,7 @@ console.log("Status:", response.status);
             }
 
             const result = await response.json();
-
+console.log(result);
             searchResults.innerHTML = "";
 
             if (!result.data || result.data.length === 0) {
