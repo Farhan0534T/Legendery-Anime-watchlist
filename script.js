@@ -24,9 +24,7 @@ const db = getDatabase(app);
 const animeInput = document.getElementById("animeInput");
 const searchInput = document.getElementById("searchInput");
 const animeList = document.getElementById("animeList");
-const universeResults = document.getElementById("universeResults");
 const searchResults = document.getElementById("searchResults");
-const universeList = document.getElementById("universeList");
 const statusList = [
   "Plan to watch",
   "Watching",
@@ -186,41 +184,11 @@ animeInput.addEventListener("input", () => {
     searchTimeout = setTimeout(async () => {
 
         const query = animeInput.value.trim();
-        universeList.innerHTML = `
-    <div class="universe-card">
-        📁 ${query} Universe
-    </div>
-`;
-document.querySelector(".universe-card").onclick = async () => {
 
-    const universe = await getUniverse(query);
-
-    universeList.innerHTML = `
-        <div class="universe-card">
-            📁 ${query} Universe
-        </div>
-    `;
-
-    universe.relations.edges.forEach(edge => {
-
-        if(edge.node.type !== "ANIME") return;
-
-        universeList.innerHTML += `
-            <div class="result">
-                ${edge.node.title.english || edge.node.title.romaji}
-            </div>
-        `;
-
-    });
-
-};
-if (query.length < 2) {
-    searchResults.innerHTML = "";
-    universeResults.innerHTML = "";
-    return;
-}
-
-showUniverseCard(query);
+        if (query.length < 2) {
+            searchResults.innerHTML = "";
+            return;
+        }
 
         try {
 
@@ -257,8 +225,8 @@ showUniverseCard(query);
                     <span>${anime.title}</span>
                 `;
 
-                item.onclick = async () => {
-await testUniverse(anime.title);
+                item.onclick = () => {
+
                     push(ref(db, "watchlist"), {
 
                         name: anime.title,
@@ -290,228 +258,3 @@ await testUniverse(anime.title);
     }, 400);
 
 });
-async function searchAniList(title) {
-
-    const query = `
-    query ($search: String) {
-      Media(search: $search, type: ANIME) {
-        id
-        title {
-          romaji
-          english
-        }
-      }
-    }
-    `;
-
-    const response = await fetch("https://graphql.anilist.co", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            query,
-            variables: {
-                search: title
-            }
-        })
-    });
-
-    const result = await response.json();
-
-    return result.data.Media;
-
-}
-async function testUniverse(name) {
-alert("testUniverse called");
-    try {
-
-        const anime = await searchAniList(name);
-
-        alert(
-            `AniList Found:\n\n${
-                anime.title.english || anime.title.romaji
-            }\n\nID: ${anime.id}`
-        );
-
-    } catch (err) {
-
-        console.log(err);
-
-    }
-
-}
-function showUniverseCard(name){
-
-    universeResults.innerHTML="";
-
-    const card=document.createElement("div");
-
-    card.className="universe-card";
-
-    card.textContent=`📁 ${name} Universe`;
-
-    card.onclick=async()=>{
-alert("Universe Clicked");
-        const universe=await getUniverse(name);
-
-        console.log(universe);
-
-        universeResults.innerHTML = "";
-
-const title = document.createElement("h3");
-title.textContent = "📁 " + (universe.title.english || universe.title.romaji);
-
-universeResults.appendChild(title);
-
-universe.relations.edges.forEach(edge => {
-
-    if(edge.node.type !== "ANIME") return;
-
-    const item = document.createElement("div");
-
-    item.className = "result";
-
-    item.textContent =
-        `${edge.node.title.english || edge.node.title.romaji}
-        (${edge.relationType})`;
-
-    universeResults.appendChild(item);
-
-});
-
-    };
-
-    universeResults.appendChild(card);
-
-}
-async function getUniverse(name) {
-
-    const query = `
-    query ($search:String){
-
-      Media(search:$search,type:ANIME){
-
-        id
-
-        title{
-          romaji
-          english
-        }
-
-        relations{
-
-          edges{
-
-            relationType
-
-            node{
-
-              id
-
-              title{
-                romaji
-                english
-              }
-
-              type
-
-            }
-
-          }
-
-        }
-
-      }
-
-    }
-    `;
-
-    const response = await fetch("https://graphql.anilist.co",{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify({
-            query,
-            variables:{
-                search:name
-            }
-        })
-    });
-
-    const result = await response.json();
-
-    return result.data.Media;
-
-}
-async function getUniverse(name) {
-
-    const query = `
-    query ($search:String){
-
-      Media(search:$search,type:ANIME){
-
-        id
-
-        title{
-          romaji
-          english
-        }
-
-        relations{
-
-          edges{
-
-            node{
-
-    id
-
-    type
-
-    format
-
-    episodes
-
-    averageScore
-
-    seasonYear
-
-    coverImage{
-        large
-    }
-
-    title{
-        romaji
-        english
-    }
-
-}
-
-          }
-
-        }
-
-      }
-
-    }
-    `;
-
-    const response = await fetch("https://graphql.anilist.co",{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify({
-            query,
-            variables:{
-                search:name
-            }
-        })
-    });
-
-    const result = await response.json();
-
-    return result.data.Media;
-
-}
