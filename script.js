@@ -191,7 +191,29 @@ animeInput.addEventListener("input", () => {
         📁 ${query} Universe
     </div>
 `;
+document.querySelector(".universe-card").onclick = async () => {
 
+    const universe = await getUniverse(query);
+
+    universeList.innerHTML = `
+        <div class="universe-card">
+            📁 ${query} Universe
+        </div>
+    `;
+
+    universe.relations.edges.forEach(edge => {
+
+        if(edge.node.type !== "ANIME") return;
+
+        universeList.innerHTML += `
+            <div class="result">
+                ${edge.node.title.english || edge.node.title.romaji}
+            </div>
+        `;
+
+    });
+
+};
 if (query.length < 2) {
     searchResults.innerHTML = "";
     universeResults.innerHTML = "";
