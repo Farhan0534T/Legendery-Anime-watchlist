@@ -74,15 +74,39 @@ window.showUniverse = async function(name){
 
         if(edge.node.type!=="ANIME") return;
 
-        const div=document.createElement("div");
+        const anime = edge.node;
 
-        div.className="result";
+const div = document.createElement("div");
 
-        div.textContent=
-            edge.node.title.english ||
-            edge.node.title.romaji;
+div.className = "universe-item";
 
-        universeList.appendChild(div);
+div.innerHTML = `
+    <img src="${anime.coverImage.large}" class="universe-poster">
+
+    <div class="universe-info">
+
+        <h3>${anime.title.english || anime.title.romaji}</h3>
+
+        <p>
+            ${anime.format || "Unknown"}
+            •
+            ${anime.episodes || "?"} Episodes
+        </p>
+
+        <p>
+            ⭐ ${anime.averageScore || "N/A"}
+            •
+            ${anime.seasonYear || ""}
+        </p>
+
+    </div>
+
+    <button class="add-btn">
+        ➕ Add
+    </button>
+`;
+
+universeList.appendChild(div);
 
     });
 
